@@ -1,0 +1,25 @@
+import javaposse.jobdsl.plugin.*
+
+node {
+
+    stage('Clone sources') {
+        git url: "https://github.com/jenkins-docs/simple-java-maven-app.git"
+    }
+    withMaven(maven: 'maven3') {
+        stage('JUnit') {
+            sh "mvn clean test"
+        }
+        stage('Another') {
+            echo ">>> Outro estagio <<<"
+            sh 'sleep 3'
+        }
+        stage('Maven build') {
+            sh "mvn --batch-mode -U -e -Dmaven.test.skip=true install"
+        }
+    }
+    stage('Deployment') {
+        echo '>>> Chame aqui sua ferramenta de CD! <<<'
+        sh 'sleep 10'
+        echo '>>> SUCESSO <<<'
+    }
+}
