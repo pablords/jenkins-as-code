@@ -5,8 +5,8 @@ LABEL Author="Pablo Ruan dos Santos"
 ARG master_image_version="v.1.0.0"
 ENV master_image_version $master_image_version
 
-ENV KUBERNETES_SERVER_URL "http://kubernetes:8443"
-ENV JENKINS_SERVER_URL "http://jenkins:8080"
+ENV KUBERNETES_SERVER_URL "https://192.168.50.10:6443"
+ENV JENKINS_SERVER_URL "http://192.168.50.10:8080"
 ENV JENKINS_TUNNEL_URL "192.168.50.10:50000"
 
 USER root
