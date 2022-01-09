@@ -11,5 +11,6 @@ services:
     volumes:
       - ./data:/var/jenkins_home
     environment:
-      - KUBERNETES_SERVER_URL=http://kubernetes:8443
-      - JENKINS_SERVER_URL=http://jenkins:8080
+      - KUBERNETES_SERVER_URL=http://192.168.50.10:8443
+      - JENKINS_SERVER_URL=http://192.168.50.10:8080
+      - JENKINS_TUNNEL_URL=192.168.50.10:50000
