@@ -45,7 +45,6 @@ github
 workflow-job
 jackson2-api
 token-macro
-ruby-runtime
 pipeline-stage-tags-metadata
 ant
 gitlab-plugin
@@ -140,3 +139,4 @@ workflow-durable-task-step
 pipeline-input-step
 built-on-column
 blueocean-commons
+ruby-runtime

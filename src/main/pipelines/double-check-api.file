@@ -1,0 +1,18 @@
+import javaposse.jobdsl.plugin.*
+
+podTemplate(containers: [
+    containerTemplate(name: 'nodejs', image: 'node:14.5.0-alpine', command: 'sleep', args: '99d')
+  ]) {
+
+    node(POD_LABEL) {
+        stage('Get a Node project') {
+            git 'https://github.com/pablords/double-check-api.git'
+            container('nodejs') {
+                stage('Build a Node project') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+    }
+}
