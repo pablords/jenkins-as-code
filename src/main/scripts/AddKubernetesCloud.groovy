@@ -60,6 +60,7 @@ def createKubernetesCloud(cloudKubernetes, podTemplateList) {
             cloudKubernetes.value.get('retentionTimeout')
             )
     kubernetesCloud.setJenkinsTunnel(jenkinsTunnelUrl)
+    kubernetesCloud.setSkipTlsVerify(true)
     return kubernetesCloud
 }
 
