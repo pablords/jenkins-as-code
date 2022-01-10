@@ -1,4 +1,4 @@
-import javaposse.jobdsl.plugin.*
+
 
 podTemplate(containers: [
     containerTemplate(name: 'nodejs', image: 'node:14.5.0-alpine', command: 'sleep', args: '99d')
