@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: jenkins
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 50

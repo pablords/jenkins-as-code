@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: pablords/jenkins-as-code:1.0.0
+          resources:
+          env:
+            - name: KUBERNETES_SERVER_URL
+              value: https://192.168.50.10:6443
+            - name: JENKINS_SERVER_URL
+              value: http://192.168.50.10:30001
+            - name: JENKINS_TUNNEL_URL
+              value: 192.168.50.10:30009
+          ports:
+            - name: http-port
+              containerPort: 8080
+            - name: jnlp-port
+              containerPort: 50000
+          volumeMounts:
+            - name: jenkins-vol
+              mountPath: /var/jenkins_vol
+      volumes:
+        - name: jenkins-vol
+          emptyDir: {}

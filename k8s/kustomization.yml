@@ -1,0 +1,5 @@
+resources:
+  - jenkins-deployment.yml
+  - jenkins-service.yml
+  - role.yml
+  - namespace.yml
