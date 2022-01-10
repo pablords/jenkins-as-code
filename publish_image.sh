@@ -8,4 +8,6 @@ docker pull jenkins
 
 docker build --no-cache -t ${dockerhub_user}/${image_name}:${image_version} . 
 
+docker push ${dockerhub_user}/${image_name}:${image_version}
+
 
