@@ -1,5 +1,7 @@
 resources:
+  - namespace.yml
   - jenkins-deployment.yml
   - jenkins-service.yml
   - role.yml
-  - namespace.yml
+  - replicaset.yml
+

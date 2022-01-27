@@ -11,7 +11,6 @@ external-monitor-job
 cobertura
 workflow-support
 build-name-setter
-gitlab-hook
 saferestart
 build-pipeline-plugin
 jenkins-design-language
@@ -28,7 +27,6 @@ subversion
 config-file-provider
 gradle
 sse-gateway
-publish-over-ssh
 blueocean-pipeline-scm-api
 pam-auth
 jquery
@@ -139,4 +137,7 @@ workflow-durable-task-step
 pipeline-input-step
 built-on-column
 blueocean-commons
-ruby-runtime
+nexus-jenkins-plugin
+http_request
+hashicorp-vault-plugin
+sonar

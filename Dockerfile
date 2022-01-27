@@ -9,6 +9,8 @@ ENV KUBERNETES_SERVER_URL "https://192.168.50.10:6443"
 ENV JENKINS_SERVER_URL "http://192.168.50.10:8080"
 ENV JENKINS_TUNNEL_URL "192.168.50.10:50000"
 
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+
 USER root
 
 RUN mkdir /srv/backup && chown jenkins:jenkins /srv/backup
