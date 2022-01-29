@@ -1,15 +1,53 @@
 
 
+
 podTemplate(containers: [
-    containerTemplate(name: 'nodejs', image: 'node:14.5.0-alpine', command: 'sleep', args: '99d')
+    containerTemplate(name: 'nodejs', image: 'node:14-slim', command: 'sleep', args: '99d'),
+    containerTemplate(name: 'sonar-scanner', image: 'sonarsource/sonar-scanner-cli', command: 'sleep', args: '99d'),
   ]) {
 
     node(POD_LABEL) {
-        stage('Get a Node project') {
+        stage('BUILD') {
             git 'https://github.com/pablords/member-registration.git'
             container('nodejs') {
-                stage('Build a Node project') {
-                    sh 'npm install'
+                stage('DEPENDENCIAS') {
+                    sh 'yarn install'
+                }
+                stage('TESTES UNITARIOS') {
+                    sh 'yarn test'
+                }
+                stage('COMPILACAO') {
+                    sh 'yarn build'
+                }
+            }
+        }
+        stage('ANALISE DE CODIGO') {
+            container('sonar-scanner') {
+                stage('SONAR') {
+                    sh '''
+                   sonar-scanner \
+                      -Dsonar.projectKey=member-registration \
+                      -Dsonar.projectBaseDir=./ \
+                      -Dsonar.sources=./src \
+                      -Dsonar.tests=./__test__ \
+                      -Dsonar.language=ts \
+                      -Dsonar.sourceEncoding=UTF-8 \
+                      -Dsonar.exclusions=**/node_modules/**,build/**,_devops/**,pipeline/** \
+                      -Dsonar.junit.reportPaths=junit.xml \
+                      -Dsonar.javascript.lcov.reportPaths=sonar/lcov.info \
+                      -Dsonar.host.url=http://devops-dev.ddns.net:8082 \
+                      -Dsonar.login=b9e79f4ee3a46cdae00714dbf6511b0bf8094e9a \
+                      -Dsonar.password=
+                    '''
+                }
+            }
+        }
+        
+        stage('PUBLISH') {
+            git 'https://github.com/pablords/member-registration.git'
+            container('nodejs') {
+                stage('DEPENDENCIAS') {
+                    sh 'npm publish'
                 }
             }
         }

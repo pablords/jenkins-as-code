@@ -2,7 +2,7 @@ FROM jenkins/jenkins
 
 LABEL Author="Pablo Ruan dos Santos" 
 
-ARG master_image_version="v.1.0.0"
+ARG master_image_version="v.1.0.1"
 ENV master_image_version $master_image_version
 
 ENV KUBERNETES_SERVER_URL "https://192.168.50.10:6443"

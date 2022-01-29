@@ -1,15 +1,35 @@
 
 
 podTemplate(containers: [
-    containerTemplate(name: 'nodejs', image: 'node:14.5.0-alpine', command: 'sleep', args: '99d')
+    containerTemplate(name: 'nodejs', image: 'node:14-slim', command: 'sleep', args: '99d'),
+    containerTemplate(name: 'sonar-scanner', image: 'sonarsource/sonar-scanner-cli', command: 'sleep', args: '99d'),
   ]) {
 
     node(POD_LABEL) {
-        stage('Get a Node project') {
+        stage('BUILD') {
             git 'https://github.com/pablords/double-check-api.git'
             container('nodejs') {
-                stage('Build a Node project') {
+                stage('DEPENDENCIAS') {
                     sh 'npm install'
+                }
+            }
+        }
+         stage('ANALISE DE CODIGO') {
+            container('sonar-scanner') {
+                stage('SONAR') {
+                    sh '''
+                   sonar-scanner \
+                      -Dsonar.projectKey=double-check-api \
+                      -Dsonar.sources=. \
+                      -Dsonar.language=ts \
+                      -Dsonar.sourceEncoding=UTF-8 \
+                      -Dsonar.exclusions=**/node_modules/**,build/**,_devops/**,pipeline/** \
+                      -Dsonar.junit.reportPaths=junit.xml \
+                      -Dsonar.javascript.lcov.reportPaths=sonar/lcov.info \
+                      -Dsonar.host.url=http://devops-dev.ddns.net:8082 \
+                      -Dsonar.login=fe0964b72123358d5fa969c89e665ba308e2b44f \
+                      -Dsonar.password=
+                    '''
                 }
             }
         }
