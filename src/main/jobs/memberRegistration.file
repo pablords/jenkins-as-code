@@ -46,7 +46,7 @@ podTemplate(containers: [
         stage('PUBLISH') {
             git 'https://github.com/pablords/member-registration.git'
             container('nodejs') {
-                stage('DEPENDENCIAS') {
+                stage('PUBLICAR ARTEFATO') {
                     sh 'npm publish'
                 }
             }
