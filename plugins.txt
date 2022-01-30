@@ -141,3 +141,4 @@ nexus-jenkins-plugin
 http_request
 hashicorp-vault-plugin
 sonar
+fortify

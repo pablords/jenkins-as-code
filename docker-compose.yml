@@ -9,8 +9,38 @@ services:
       - 8080:8080
       - 50000:50000
     volumes:
-      - ./data:/var/jenkins_home
+      #- ./data:/var/jenkins_home
+      - ./slave-docker-certs:/certs/client:ro
+      - $HOME:/home
     environment:
       - KUBERNETES_SERVER_URL=https://192.168.50.10:6443
       - JENKINS_SERVER_URL=http://192.168.50.10:8080
       - JENKINS_TUNNEL_URL=192.168.50.10:50000
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    networks:
+      jenkins-net:
+        aliases:
+          - docker
+
+  slave-docker:
+    container_name: slave-docker
+    image: docker:dind
+    privileged: true
+    ports:
+      - 2376:2376
+      - 3000:3000
+    volumes:
+      - ./slave-docker-certs:/certs/client
+      - ./slave-docker-data:/var/jenkins_home
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    command: ["dockerd-entrypoint.sh", "--insecure-registry=devops-dev.ddns.net:5000"]
+
+    networks:
+      jenkins-net:
+        aliases:
+          - docker
+networks:
+  jenkins-net:

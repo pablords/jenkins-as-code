@@ -1,12 +1,25 @@
+podTemplate(
+    containers: [
+        containerTemplate(name: 'nodejs', image: 'node:14-slim', command: 'sleep', args: '99d'),
+        containerTemplate(name: 'sonar-scanner', image: 'sonarsource/sonar-scanner-cli', command: 'sleep', args: '99d'),
+        containerTemplate(name: 'docker', image: 'docker', command: 'sleep', args: '99d')
+    ],
+volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
+)
 
-
-
-podTemplate(containers: [
-    containerTemplate(name: 'nodejs', image: 'node:14-slim', command: 'sleep', args: '99d'),
-    containerTemplate(name: 'sonar-scanner', image: 'sonarsource/sonar-scanner-cli', command: 'sleep', args: '99d'),
-  ]) {
+{
 
     node(POD_LABEL) {
+        stage('BUILD AND PUSH IMAGE') {
+            container('docker'){
+                stage('BUILD AND PUSH IMAGE') {
+                    sh 'apk add wget'
+                    sh 'wget -c http://devops-dev.ddns.net:8081/repository/npm-private/member-registration/-/member-registration-1.0.0.tgz -O - | tar -xz'
+                    sh 'cd package && docker build -f Dockerfile -t devops-dev.ddns.net:5000/member-registration-1.0.1 .'
+                    sh 'docker login -u admin -p 1q2w3e4r devops-dev.ddns.net:5000'
+                }
+            }
+        }
         stage('BUILD') {
             git 'https://github.com/pablords/member-registration.git'
             container('nodejs') {
@@ -44,13 +57,12 @@ podTemplate(containers: [
         }
         
         stage('PUBLISH') {
-            git 'https://github.com/pablords/member-registration.git'
             container('nodejs') {
                 stage('PUBLICAR ARTEFATO') {
                     sh 'npm publish'
                 }
             }
         }
-
+        
     }
 }
