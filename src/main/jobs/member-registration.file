@@ -10,16 +10,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
 {
 
     node(POD_LABEL) {
-        stage('BUILD AND PUSH IMAGE') {
-            container('docker'){
-                stage('BUILD AND PUSH IMAGE') {
-                    sh 'apk add wget'
-                    sh 'wget -c http://devops-dev.ddns.net:8081/repository/npm-private/member-registration/-/member-registration-1.0.0.tgz -O - | tar -xz'
-                    sh 'cd package && docker build -f Dockerfile -t devops-dev.ddns.net:5000/member-registration-1.0.1 .'
-                    sh 'docker login -u admin -p 1q2w3e4r devops-dev.ddns.net:5000'
-                }
-            }
-        }
+        
         stage('BUILD') {
             git 'https://github.com/pablords/member-registration.git'
             container('nodejs') {
@@ -60,6 +51,14 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
             container('nodejs') {
                 stage('PUBLICAR ARTEFATO') {
                     sh 'npm publish'
+                }
+            }
+        }
+        
+        stage('BUILD AND PUSH IMAGE') {
+            container('docker'){
+                script {
+                    build job: 'member-registration-package'
                 }
             }
         }

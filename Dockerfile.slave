@@ -1,0 +1,12 @@
+FROM docker:dind
+
+ARG privileged=true
+
+COPY ./slave-docker-certs /certs/client
+COPY ./slave-docker-data /var/jenkins_home
+
+ENV DOCKER_TLS_CERTDIR=/certs
+
+EXPOSE 2376 
+
+CMD ["dockerd-entrypoint.sh", "--insecure-registry=devops-dev.ddns.net:5000"]

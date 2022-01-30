@@ -9,7 +9,7 @@ services:
       - 8080:8080
       - 50000:50000
     volumes:
-      #- ./data:/var/jenkins_home
+      - ./data:/var/jenkins_home
       - ./slave-docker-certs:/certs/client:ro
       - $HOME:/home
     environment:
@@ -26,11 +26,13 @@ services:
 
   slave-docker:
     container_name: slave-docker
-    image: docker:dind
+    build: 
+      context: ./
+      dockerfile: Dockerfile.slave
+    image: pablords/slave-docker:1.0.0
     privileged: true
     ports:
       - 2376:2376
-      - 3000:3000
     volumes:
       - ./slave-docker-certs:/certs/client
       - ./slave-docker-data:/var/jenkins_home
