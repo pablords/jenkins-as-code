@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   jenkins:
-    image: pablords/jenkins-as-code:1.0.1
+    image: pablords/jenkins-as-code:1.0.2
     build: .
     container_name: jenkins
     ports:

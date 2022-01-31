@@ -12,7 +12,6 @@ cobertura
 workflow-support
 build-name-setter
 saferestart
-build-pipeline-plugin
 jenkins-design-language
 jdk-tool
 active-directory
@@ -88,7 +87,6 @@ copyartifact
 variant
 ssh-credentials
 workflow-cps
-pipeline-model-declarative-agent
 workflow-multibranch
 envinject
 git
@@ -99,7 +97,6 @@ blueocean-github-pipeline
 favorite
 pipeline-model-api
 blueocean-display-url
-sonar-quality-gates
 rebuild
 matrix-auth
 blueocean-pipeline-editor
@@ -142,3 +139,4 @@ http_request
 hashicorp-vault-plugin
 sonar
 fortify
+versionnumber
