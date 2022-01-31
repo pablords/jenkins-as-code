@@ -3,10 +3,13 @@ pipeline {
     stages {
         stage('Build and Publish') { 
             steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-registry', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'docker login -u ${USERNAME} -p ${PASSWORD} devops-dev.ddns.net:5000'
+                }
                 sh 'wget -c http://devops-dev.ddns.net:8081/repository/npm-private/member-registration/-/member-registration-1.0.0.tgz -O - | tar -xz'
                 sh 'cd package && docker build -f Dockerfile -t devops-dev.ddns.net:5000/member-registration-1.0.1 .'
-                sh 'docker login -u admin -p senha devops-dev.ddns.net:5000'
                 sh 'docker push devops-dev.ddns.net:5000/member-registration-1.0.1'
+              
             }
         }
     }
