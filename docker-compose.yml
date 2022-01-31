@@ -1,5 +1,4 @@
 version: '3.3'
-
 services:
   jenkins:
     image: pablords/jenkins-as-code:1.0.1
@@ -11,6 +10,9 @@ services:
     volumes:
       - ./data:/var/jenkins_home
       - ./slave-docker-certs:/certs/client:ro
+      - ./src/main/scripts:/usr/share/jenkins/ref/init.groovy.d
+      - ./src/main/config:/usr/share/jenkins/ref/config
+      - ./src/main/jobs:/usr/share/jenkins/ref/config/initials
       - $HOME:/home
     environment:
       - KUBERNETES_SERVER_URL=https://192.168.50.10:6443
