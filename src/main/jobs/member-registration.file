@@ -10,7 +10,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
 {
 
     node(POD_LABEL) {
-        
+
         stage('BUILD') {
             git 'https://github.com/pablords/member-registration.git'
             container('nodejs') {
@@ -40,7 +40,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
                       -Dsonar.junit.reportPaths=junit.xml \
                       -Dsonar.javascript.lcov.reportPaths=sonar/lcov.info \
                       -Dsonar.host.url=http://devops-dev.ddns.net:8082 \
-                      -Dsonar.login=b9e79f4ee3a46cdae00714dbf6511b0bf8094e9a \
+                      -Dsonar.login=71a19e924eaa7d66b153a518b908047b76d19fa8 \
                       -Dsonar.password=
                     '''
                 }
@@ -50,7 +50,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
         stage('PUBLISH') {
             container('nodejs') {
                 stage('PUBLICAR ARTEFATO') {
-                    sh 'npm publish'
+                   sh "npm publish --tag ${env.JOB_NAME}-${env.BUILD_NUMBER}"
                 }
             }
         }
@@ -58,7 +58,11 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
         stage('BUILD AND PUSH IMAGE') {
             container('docker'){
                 script {
-                    build job: 'member-registration-package'
+                    build job: 'member-registration-package', wait: false, 
+                    parameters: [
+                         string(name: 'TAG', value: "${env.BUILD_NUMBER}"),
+                         string(name: 'JOB', value: "${env.JOB_NAME}")
+                    ]
                 }
             }
         }
