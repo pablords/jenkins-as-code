@@ -1,10 +1,15 @@
+
+
+
 podTemplate(
     containers: [
         containerTemplate(name: 'nodejs', image: 'node:14-slim', command: 'sleep', args: '99d'),
         containerTemplate(name: 'sonar-scanner', image: 'sonarsource/sonar-scanner-cli', command: 'sleep', args: '99d'),
         containerTemplate(name: 'docker', image: 'docker', command: 'sleep', args: '99d')
     ],
-volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
+    volumes: [
+        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
+    ]
 )
 
 {
@@ -40,7 +45,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
                       -Dsonar.junit.reportPaths=junit.xml \
                       -Dsonar.javascript.lcov.reportPaths=sonar/lcov.info \
                       -Dsonar.host.url=http://devops-dev.ddns.net:8082 \
-                      -Dsonar.login=71a19e924eaa7d66b153a518b908047b76d19fa8 \
+                      -Dsonar.login=0d1d5dadc65634706ce295fc9ebaa2188dd7f243 \
                       -Dsonar.password=
                     '''
                 }
@@ -50,7 +55,10 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
         stage('PUBLISH') {
             container('nodejs') {
                 stage('PUBLICAR ARTEFATO') {
-                   sh "npm publish --tag ${env.JOB_NAME}-${env.BUILD_NUMBER}"
+                   sh "npm version major"
+                   def props = readJSON file: './package.json'
+                   VERSION = props['version']
+                   sh "npm publish"
                 }
             }
         }
@@ -60,7 +68,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
                 script {
                     build job: 'member-registration-package', wait: false, 
                     parameters: [
-                         string(name: 'TAG', value: "${env.BUILD_NUMBER}"),
+                         string(name: 'TAG', value: VERSION),
                          string(name: 'JOB', value: "${env.JOB_NAME}")
                     ]
                 }

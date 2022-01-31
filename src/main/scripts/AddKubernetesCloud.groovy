@@ -19,7 +19,6 @@ def home_dir = System.getenv("JENKINS_HOME")
 def properties = new ConfigSlurper().parse(new File("$home_dir/config/clouds.properties").toURI().toURL())
 
 
-
 properties.kubernetes.each { cloudKubernetes ->
     println ">>> Kubernetes Cloud Setting up: " + cloudKubernetes.value.get('name')
 

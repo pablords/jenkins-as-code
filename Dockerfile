@@ -20,9 +20,9 @@ COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
 # Auto Setup Scripts
-COPY src/main/scripts/* /usr/share/jenkins/ref/init.groovy.d/
-COPY src/main/config/*.properties /usr/share/jenkins/ref/config/
-COPY src/main/jobs/* /usr/share/jenkins/ref/config/initials/
+#COPY src/main/scripts/* /usr/share/jenkins/ref/init.groovy.d/
+#COPY src/main/config/*.properties /usr/share/jenkins/ref/config/
+#COPY src/main/jobs/* /usr/share/jenkins/ref/config/initials/
 
 
 EXPOSE 8080 50000
