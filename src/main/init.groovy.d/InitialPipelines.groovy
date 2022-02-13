@@ -5,7 +5,7 @@ import jenkins.model.Jenkins
 import jenkins.scm.api.SCMSource
 
 def home_dir = System.getenv("JENKINS_HOME")
-def properties = new ConfigSlurper().parse(new File("$home_dir/config/initial-jobs.properties").toURI().toURL())
+def properties = new ConfigSlurper().parse(new File("$home_dir/properties/initial-jobs.properties").toURI().toURL())
 def jenkins = Jenkins.getInstanceOrNull()
 
 println "############################ STARTING INITIAL PIPELINES SETUP ############################"

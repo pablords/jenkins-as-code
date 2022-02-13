@@ -9,7 +9,7 @@ import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition
 def home_dir = System.getenv("JENKINS_HOME")
 GroovyShell shell = new GroovyShell()
 def helpers = shell.parse(new File("$home_dir/init.groovy.d/Helpers.groovy"))
-def properties = new ConfigSlurper().parse(new File("$home_dir/config/initial-jobs.properties").toURI().toURL())
+def properties = new ConfigSlurper().parse(new File("$home_dir/properties/initial-jobs.properties").toURI().toURL())
 def instance = Jenkins.getInstanceOrNull()
 
 println "############################ STARTING INITIAL JOBS SETUP ############################"

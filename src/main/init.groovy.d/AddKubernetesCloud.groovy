@@ -16,7 +16,7 @@ def jenkins = Jenkins.getInstanceOrNull()
 def cloudList = jenkins.clouds
 
 def home_dir = System.getenv("JENKINS_HOME")
-def properties = new ConfigSlurper().parse(new File("$home_dir/config/clouds.properties").toURI().toURL())
+def properties = new ConfigSlurper().parse(new File("$home_dir/properties/clouds.properties").toURI().toURL())
 
 
 properties.kubernetes.each { cloudKubernetes ->
@@ -57,7 +57,7 @@ def createKubernetesCloud(cloudKubernetes, podTemplateList) {
             cloudKubernetes.value.get('connectTimeout'),
             cloudKubernetes.value.get('readTimeout'),
             cloudKubernetes.value.get('retentionTimeout')
-            )
+    )
     kubernetesCloud.setJenkinsTunnel(jenkinsTunnelUrl)
     kubernetesCloud.setSkipTlsVerify(true)
     return kubernetesCloud

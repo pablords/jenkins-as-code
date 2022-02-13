@@ -7,7 +7,7 @@ import java.net.InetAddress
 def home_dir = System.getenv("JENKINS_HOME")
 GroovyShell shell = new GroovyShell()
 def helpers = shell.parse(new File("$home_dir/init.groovy.d/Helpers.groovy"))
-def properties = new ConfigSlurper().parse(new File("$home_dir/config/globals.properties").toURI().toURL())
+def properties = new ConfigSlurper().parse(new File("$home_dir/properties/globals.properties").toURI().toURL())
 
 println "############################ STARTING GLOBAL SETUP ############################"
 
@@ -54,7 +54,7 @@ if ( env.containsKey('master_image_version') ) {
   // Set it as a global variable in Jenkins to increase visibility
   helpers.addGlobalEnvVariable(Jenkins, 'master_image_version', env['master_image_version'])
   def date = new Date()
-  sdf = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+  sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
   systemMessage = "Este Jenkins foi configurado e provisionado via código.\n\n" +
                   "Todas as alterações feitas de forma manual serão perdidas no próximo restart.\n " +
                   "Alterações devem ser feitas em: ${properties.global.variables.default_repo}\n\n" +

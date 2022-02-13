@@ -10,8 +10,8 @@ services:
     volumes:
       #- ./data:/var/jenkins_home
       - ./slave-docker-certs:/certs/client:ro
-      - ./src/main/scripts:/usr/share/jenkins/ref/init.groovy.d
-      - ./src/main/config:/usr/share/jenkins/ref/config
+      - ./src/main/init.groovy.d:/usr/share/jenkins/ref/init.groovy.d
+      - ./src/main/properties:/usr/share/jenkins/ref/properties
       - ./src/main/jobs:/usr/share/jenkins/ref/config/initials
       - $HOME:/home
     environment:

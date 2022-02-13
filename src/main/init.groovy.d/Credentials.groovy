@@ -12,7 +12,7 @@ import hudson.plugins.sshslaves.*
 
 // Read properties
 def home_dir = System.getenv("JENKINS_HOME")
-def properties = new ConfigSlurper().parse(new File("$home_dir/config/credentials.properties").toURI().toURL())
+def properties = new ConfigSlurper().parse(new File("$home_dir/properties/credentials.properties").toURI().toURL())
 
 global_domain = Domain.global()
 credentials_store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
