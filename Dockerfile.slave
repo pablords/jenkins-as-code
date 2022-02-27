@@ -2,10 +2,10 @@ FROM docker:dind
 
 ARG privileged=true
 
-COPY ./slave-docker-certs /certs/client
-COPY ./slave-docker-data /var/jenkins_home
+#COPY ./slave-docker-certs /certs/client
+#COPY ./slave-docker-data /var/jenkins_home
 
-ENV DOCKER_TLS_CERTDIR=/certs
+#ENV DOCKER_TLS_CERTDIR=/certs
 
 EXPOSE 2376 
 

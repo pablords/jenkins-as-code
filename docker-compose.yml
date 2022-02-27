@@ -1,7 +1,7 @@
-version: '3.3'
+version: '2.0'
 services:
   jenkins:
-    image: pablords/jenkins-as-code:1.0.2
+    image: pablords/jenkins-as-code:1.0.3
     build: .
     container_name: jenkins
     ports:
@@ -9,7 +9,7 @@ services:
       - 50000:50000
     volumes:
       #- ./data:/var/jenkins_home
-      - ./slave-docker-certs:/certs/client:ro
+      #- ./slave-docker-certs:/certs/client:ro
       - ./src/main/init.groovy.d:/usr/share/jenkins/ref/init.groovy.d
       - ./src/main/properties:/usr/share/jenkins/ref/properties
       - ./src/main/jobs:/usr/share/jenkins/ref/config/initials
@@ -18,6 +18,8 @@ services:
       - KUBERNETES_SERVER_URL=https://192.168.50.10:6443
       - JENKINS_SERVER_URL=http://192.168.50.10:8080
       - JENKINS_TUNNEL_URL=192.168.50.10:50000
+      - SONARQUBE_URL=http://devops-dev.ddns.net:9000
+      - VAULT_URL=http://devops-dev.ddns.net:8083
       - DOCKER_HOST=tcp://docker:2376
       - DOCKER_CERT_PATH=/certs/client
       - DOCKER_TLS_VERIFY=1
@@ -36,7 +38,7 @@ services:
     ports:
       - 2376:2376
     volumes:
-      - ./slave-docker-certs:/certs/client
+      #- ./slave-docker-certs:/certs/client
       - ./slave-docker-data:/var/jenkins_home
     environment:
       - DOCKER_TLS_CERTDIR=/certs

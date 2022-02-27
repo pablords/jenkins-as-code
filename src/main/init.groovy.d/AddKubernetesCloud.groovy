@@ -60,6 +60,7 @@ def createKubernetesCloud(cloudKubernetes, podTemplateList) {
     )
     kubernetesCloud.setJenkinsTunnel(jenkinsTunnelUrl)
     kubernetesCloud.setSkipTlsVerify(true)
+    kubernetesCloud.setCredentialsId("K8S_CREDENTIAL")
     return kubernetesCloud
 }
 

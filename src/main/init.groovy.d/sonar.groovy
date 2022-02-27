@@ -12,12 +12,12 @@ println "###################### SONAR CONFIG ######################"
 def jenkins = Jenkins.getInstance()
 descriptor    = jenkins.getDescriptor(SonarGlobalConfiguration.class)
 
-def SONARQUBE_HTTP_ENDPOINT = System.getenv('SONARQUBE_HTTP_ENDPOINT') ?: 'http://devops-dev.ddns.net:9000'
+def SONARQUBE_HTTP_ENDPOINT = System.getenv('SONARQUBE_URL') ?: ''
 
 def config = new SonarInstallation(
 	"sonarqube",              //name
 	SONARQUBE_HTTP_ENDPOINT,  //serverUrl
-	null,                     //credentialsId
+	"SONAR_CREDENTIAL",                     //credentialsId
 	null,                     //serverAuthenticationToken
 	"",                       //webhookSecretId
 	"",                       //additionalProperties

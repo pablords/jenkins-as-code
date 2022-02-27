@@ -1,2 +1,7 @@
 /data
 /.metadata/
+slave-docker-certs
+
+/target/
+
+.idea

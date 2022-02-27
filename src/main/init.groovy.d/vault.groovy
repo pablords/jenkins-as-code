@@ -1,9 +1,8 @@
-
+import com.datapipe.jenkins.vault.credentials.VaultCredential
+import com.datapipe.jenkins.vault.credentials.common.VaultStringCredentialBinding
 import com.datapipe.jenkins.vault.configuration.VaultConfiguration
-import com.cloudbees.plugins.credentials.CredentialsScope
+import com.datapipe.jenkins.vault.credentials
 import jenkins.model.Jenkins
-import com.datapipe.jenkins.vault.configuration.*
-
 
 println "############################ VAULT CONFIG ############################"
 
@@ -11,9 +10,9 @@ println "############################ VAULT CONFIG ############################"
 def descriptor = Jenkins.instance.getDescriptorByType(com.datapipe.jenkins.vault.configuration.GlobalVaultConfiguration)
 
 
-def VAULT_URL = System.getenv('SONARQUBE_URL') ?: 'http://devops-dev.ddns.net:8083'
+def VAULT_URL = System.getenv('VAULT_URL') ?: ''
 
-def VAULT_APP_ROLE_CREDENTIAL = System.getenv('VAULT_APP_ROLE_CREDENTIAL') ?: ''
+def VAULT_APP_ROLE_CREDENTIAL = 'VAULT_APP_ROLE_CREDENTIAL' ?: ''
 
 def config = new VaultConfiguration(VAULT_URL, VAULT_APP_ROLE_CREDENTIAL, false)
 
@@ -22,5 +21,7 @@ config.setSkipSslVerification(true)
 
 descriptor.setConfiguration(config)
 descriptor.save()
+
+
 
 println "DONE VAULT CONFIG"
