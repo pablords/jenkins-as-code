@@ -1,7 +1,4 @@
-import com.datapipe.jenkins.vault.credentials.VaultCredential
-import com.datapipe.jenkins.vault.credentials.common.VaultStringCredentialBinding
 import com.datapipe.jenkins.vault.configuration.VaultConfiguration
-import com.datapipe.jenkins.vault.credentials
 import jenkins.model.Jenkins
 
 println "############################ VAULT CONFIG ############################"
