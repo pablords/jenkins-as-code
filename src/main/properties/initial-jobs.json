@@ -1,0 +1,14 @@
+{
+    "initialJobs": [
+        {
+            "name": "member-registration-package",
+            "pipelineFile": "member-registration-package.file",
+            "parameters": []
+        },
+        {
+            "name": "member-registration",
+            "pipelineFile": "member-registration.file",
+            "parameters": []
+        }
+    ]
+}

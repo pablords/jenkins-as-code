@@ -1,0 +1,28 @@
+{
+    "kubernetes": [
+        {
+            "name": "kubernetes",
+            "namespace": "jenkins",
+            "containerCapStr": "10",
+            "connectTimeout": 5,
+            "readTimeout": 15,
+            "retentionTimeout": 10,
+            "pods": [
+                {
+                    "name": "jenkins-agent",
+                    "namespace": "jenkins",
+                    "label": "jenkins-agent"
+                }
+            ],
+            "containers": [
+                {
+                    "name": "jenkins-slave",
+                    "image": "jenkins/inbound-agent",
+                    "command": "",
+                    "args": "cat",
+                    "ttyEnabled": true
+                }
+            ]
+        }
+    ]
+}

@@ -2,12 +2,16 @@ import java.lang.System
 import hudson.model.*
 import jenkins.model.*
 import java.net.InetAddress
+import groovy.json.JsonSlurper
 
 // load Helpers and read properties
 def home_dir = System.getenv("JENKINS_HOME")
 GroovyShell shell = new GroovyShell()
 def helpers = shell.parse(new File("$home_dir/init.groovy.d/Helpers.groovy"))
-def properties = new ConfigSlurper().parse(new File("$home_dir/properties/globals.properties").toURI().toURL())
+
+
+def jsonSlurper = new JsonSlurper()
+def properties = jsonSlurper.parse(new File("$home_dir/properties/globals.json"))
 
 println "############################ STARTING GLOBAL SETUP ############################"
 

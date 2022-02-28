@@ -1,7 +1,7 @@
 import com.datapipe.jenkins.vault.configuration.VaultConfiguration
 import jenkins.model.Jenkins
 
-println "############################ VAULT CONFIG ############################"
+println "############################ VAULT CONFIG ################################################################"
 
 
 def descriptor = Jenkins.instance.getDescriptorByType(com.datapipe.jenkins.vault.configuration.GlobalVaultConfiguration)

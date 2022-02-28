@@ -22,7 +22,7 @@ RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
 # Auto Setup Scripts
 COPY src/main/init.groovy.d/* /usr/share/jenkins/ref/init.groovy.d/
-COPY src/main/properties/*.properties /usr/share/jenkins/ref/properties/
+COPY src/main/properties/* /usr/share/jenkins/ref/properties/
 COPY src/main/jobs/* /usr/share/jenkins/ref/config/initials/
 
 

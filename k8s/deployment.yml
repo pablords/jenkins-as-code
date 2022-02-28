@@ -41,9 +41,12 @@ spec:
                 secretKeyRef:
                   name: vault-root-credential
                   key: secret
-          #volumeMounts:
-          #  - name: jenkins-vol
-          #    mountPath: /var/jenkins_home
+          volumeMounts:
+            - name: jenkins-vol
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-vol
+          emptyDir: {}
       #volumes:
       #  - name: jenkins-vol
       #    persistentVolumeClaim:

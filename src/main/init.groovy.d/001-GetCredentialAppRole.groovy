@@ -1,14 +1,10 @@
 import com.datapipe.jenkins.vault.credentials.VaultAppRoleCredential
-import jenkins.model.Jenkins
-import com.cloudbees.plugins.credentials.domains.Domain
-import org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl
-import com.cloudbees.plugins.credentials.CredentialsScope
-import hudson.util.Secret
-import jenkins.model.*
-import com.datapipe.jenkins.vault.credentials.VaultAppRoleCredential
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.plugins.credentials.CredentialsScope
 import hudson.util.Secret
+
+
+println "############################ GET CREDENTIALS #######################################################"
 
 
 role_id = null
@@ -21,7 +17,7 @@ store = instance.getExtensionList("com.cloudbees.plugins.credentials.SystemCrede
 VAULT_URL = System.getenv('VAULT_URL') + "/v1/" ?: ''
 
 
-def VAULT_TOKEN_ADMIN = System.getenv('VAULT_TOKEN_ADMIN') ?: 's.2WxouO1uLR0aszXtY2iYaEdU'
+def VAULT_TOKEN_ADMIN = System.getenv('VAULT_TOKEN_ADMIN') ?: ''
 
 def getRoleId = new URL(VAULT_URL + "auth/approle/role/jenkins-role/role-id").openConnection();
 getRoleId.setRequestMethod("GET")

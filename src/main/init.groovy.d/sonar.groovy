@@ -6,7 +6,7 @@ import hudson.plugins.sonar.model.TriggersConfig
 
 
 
-println "###################### SONAR CONFIG ######################"
+println "###################### SONAR CONFIG ##############################################################"
 
 
 def jenkins = Jenkins.getInstance()

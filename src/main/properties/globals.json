@@ -1,0 +1,32 @@
+{
+    "default_credentials_id": "jenkins_rsa",
+    "images": {
+        "masterImageName": "jenkins/jenkins"
+    },
+    "registry": {
+        "registryURL": "http://192.168.50.10:8080",
+        "registryCredentials": " "
+    },
+    "global": {
+        "numExecutorsOnMaster": 1,
+        "jenkinsRootUrl": "",
+        "jenkinsAdminEmail": "Jenkins Admin <pablords@gmail.com>",
+        "scmQuietPeriod": 3,
+        "scmCheckoutRetryCount": 3,
+        "git": {
+            "name": "Jenkins Git User",
+            "email": "pablo.santos@telefonica.com"
+        },
+        "variables": {
+            "default_credentials": "${default_credentials_id}",
+            "default_credentials_back": "credentials.base.credentialsId",
+            "default_repo": "https://github.com/pablords/jenkins-as-a-code.git",
+            "default_branch": "master",
+            "default_registry_url": "${registry.registryURL}",
+            "default_registry_credId": "${registry.registryCredentials}",
+            "utility_slave": "master",
+            "utility_slave_old": "utility-slave",
+            "master_image_name": "${images.masterImageName}"
+        }
+    }
+}
