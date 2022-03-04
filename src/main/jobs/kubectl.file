@@ -1,0 +1,61 @@
+podTemplate(
+    containers: [
+        containerTemplate(name: 'kubectl', image: 'ubuntu:latest', command: 'sleep', args: '99d')
+    ]
+  ) {
+
+    environment {
+        VAULT_APP_ROLE_CREDENTIAL = credentials('VAULT_APP_ROLE_CREDENTIAL')
+        VAULT_URL = 'http://devops-dev.ddns.net:8083'
+    }
+    node(POD_LABEL) {
+        
+    
+    def secrets = [
+        [path: 'kv/apps/kubeconfig', engineVersion: 1, secretValues: [
+            [envVar: 'kubeconfig', vaultKey: 'file']
+            ]
+        ]
+    ]
+
+
+    def configuration = [
+        vaultUrl: env.VAULT_URL,
+        vaultCredentialId: 'VAULT_APP_ROLE_CREDENTIAL',
+        engineVersion: 1
+    ]
+       
+    
+        stage('get secret'){
+            container('kubectl'){
+                stage('decode base64'){
+                    withVault([configuration: configuration, vaultSecrets: secrets]) {
+                        byte[] decoded = env.kubeconfig.decodeBase64()
+                        def decode = new String(decoded)
+                        writeFile file: 'config', text: decode
+                        sh 'mkdir ${WORKSPACE}/.kube'
+                        sh 'mv config ${WORKSPACE}/.kube'
+                        sh 'cat ${WORKSPACE}/.kube/config'
+
+                    }
+                }
+                
+                    
+                stage('command') {
+                    sh '''
+                    apt-get update && apt-get update -y
+                    apt-get install curl -y
+                    apt-get install -y apt-transport-https ca-certificates curl
+                    curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+                    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+                    apt-get update
+                    apt-get install -y kubectl
+                    kubectl --token= get pods -n jenkins
+                    '''
+                }
+
+            }
+        }
+        
+    }
+}

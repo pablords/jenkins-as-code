@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins
-  namespace: devops
+  namespace: jenkins
   labels:
     app: jenkins
 spec:
@@ -27,15 +27,15 @@ spec:
               containerPort: 50000
           env:
             - name: KUBERNETES_SERVER_URL
-              value: ""
+              value: "https://kubernetes.default"
             - name: SONARQUBE_URL
               value: "http://devops-dev.ddns.net:9000"
             - name: VAULT_URL
               value: "http://devops-dev.ddns.net:8083"
             - name: JENKINS_SERVER_URL
-              value: http://jenkins.devops.svc.cluster.local:8080
+              value: ""
             - name: JENKINS_TUNNEL_URL
-              value: jenkins-jnlp.devops.svc.cluster.local:50000
+              value: ""
             - name: VAULT_TOKEN_ADMIN
               valueFrom:
                 secretKeyRef:

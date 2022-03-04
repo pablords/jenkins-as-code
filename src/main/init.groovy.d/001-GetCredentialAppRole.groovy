@@ -2,9 +2,9 @@ import com.datapipe.jenkins.vault.credentials.VaultAppRoleCredential
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.plugins.credentials.CredentialsScope
 import hudson.util.Secret
+import jenkins.model.Jenkins
 
-
-println "############################ GET CREDENTIALS #######################################################"
+println "############################ GET CREDENTIAL APP ROLE #######################################################"
 
 
 role_id = null
@@ -47,7 +47,6 @@ if(getSecretId.getResponseCode().equals(200)) {
     assert pjson instanceof Map
     secret_id = pjson.data['secret_id']
 }
-
 
 
 secretText = new VaultAppRoleCredential(

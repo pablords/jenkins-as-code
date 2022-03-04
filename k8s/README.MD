@@ -1,19 +1,18 @@
-####
-https://www.digitalocean.com/community/tutorials/how-to-install-jenkins-on-kubernetes
-
-https://quickwinsit.com/2021/12/08/como-colocar-o-jenkins-rodando-no-kubernetes/
-
-https://kubernetes.io/pt-br/docs/reference/access-authn-authz/authentication/
-
-######
-
-https://devopscube.com/jenkins-build-agents-kubernetes/
-
-
-
 
 ######
 para configuracao fora do cluster
 criacao de namespace / serviceaccount jenkins com output token
 
 kubectl create namespace jenkins && kubectl create serviceaccount jenkins --namespace=jenkins && kubectl describe secret $(kubectl describe serviceaccount jenkins --namespace=jenkins | grep Token | awk '{print $2}') --namespace=jenkins && kubectl create rolebinding jenkins-admin-binding --clusterrole=admin --serviceaccount=jenkins:jenkins --namespace=jenkins
+
+
+Criar secret VAULT_ROOT
+
+kubectl create secret generic vault-root-credential \
+--from-literal=secret="s.2WxouO1uLR0aszXtY2iYaEdU" \
+--namespace="jenkins"
+
+
+
+kubectl create clusterrolebinding jenkins --clusterrole cluster-admin --serviceaccount=jenkins:default
+

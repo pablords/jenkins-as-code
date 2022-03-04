@@ -9,6 +9,11 @@
             "name": "member-registration",
             "pipelineFile": "member-registration.file",
             "parameters": []
+        },
+        {
+            "name": "kubectl",
+            "pipelineFile": "kubectl.file",
+            "parameters": []
         }
     ]
 }

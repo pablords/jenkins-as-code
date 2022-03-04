@@ -1,6 +1,11 @@
 resources:
+  - namespace.yml
   - deployment.yml
   - service.yml
+  - service-accounts.yml
   - role.yml
-  #- pv.yml
-  #- pvc.yml
+  - rolebing.yml
+  - pv.yml
+  - pvc.yml
+  - ingress.yml
+

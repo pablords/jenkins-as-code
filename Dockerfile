@@ -13,7 +13,6 @@ ENV VAULT_URL=http://devops-dev.ddns.net:8083
 
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 
-
 USER jenkins
 
 # Plugins Install
