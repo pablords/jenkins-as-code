@@ -25,12 +25,13 @@ podTemplate(
         
     
         stage('get secret'){
-            git 'https://github.com/pablords/member-registration.git'
             container('kubectl'){
                 stage('command') {
                     withVault([configuration: configuration, vaultSecrets: secrets]) {
-                        sh "cd k8s && kubectl --token=${k8s_role} set image deployment/api -n member-registration  api=member-registration:2.0.0"
-                        sh 'kubectl --token=${k8s_role} get pods -n member-registration'
+                        sh "kubectl --token=${k8s_role} set image deployment/api -n ${params.IMAGE}  api=${params.IMAGE}:${params.TAG}"
+                        sh "kubectl --token=${k8s_role} get pods -n ${params.IMAGE}"
+                        sh "kubectl --token=${k8s_role} rollout status deployment/api -n ${params.IMAGE}"
+                        sh "kubectl --token=${k8s_role} get rs -n ${params.IMAGE}"
                     }
                 }
 
