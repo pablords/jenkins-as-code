@@ -7,14 +7,30 @@ podTemplate(
     environment {
         VAULT_URL = 'http://devops-dev.ddns.net:8083'
     }
+    
+    def secrets = [
+        [path: 'kv/apps/member-registration/k8s-role', engineVersion: 1, secretValues: [
+            [envVar: 'k8s_role', vaultKey: 'secret']
+            ]
+        ]
+    ]
+
+
+    def configuration = [
+        vaultUrl: env.VAULT_URL,
+        vaultCredentialId: 'VAULT_APP_ROLE_CREDENTIAL',
+        engineVersion: 1
+    ]
     node(POD_LABEL) {
         
     
         stage('get secret'){
+            git 'https://github.com/pablords/member-registration.git'
             container('kubectl'){
                 stage('command') {
-                    withCredentials([string(credentialsId: 'K8S_CREDENTIAL', variable: 'k8s')]) {
-                        sh 'kubectl --token=$k8s get pods -n jenkins'
+                    withVault([configuration: configuration, vaultSecrets: secrets]) {
+                        sh "cd k8s && kubectl --token=${k8s_role} set image deployment/api -n member-registration  api=member-registration:2.0.0"
+                        sh 'kubectl --token=${k8s_role} get pods -n member-registration'
                     }
                 }
 
