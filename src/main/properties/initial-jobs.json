@@ -1,18 +1,23 @@
 {
     "initialJobs": [
         {
+            "name": "member-registration-build",
+            "pipelineFile": "member-registration-build.file",
+            "parameters": []
+        },
+        {
             "name": "member-registration-package",
             "pipelineFile": "member-registration-package.file",
             "parameters": []
         },
         {
-            "name": "member-registration",
-            "pipelineFile": "member-registration.file",
+            "name": "member-registration-deploy",
+            "pipelineFile": "member-registration-deploy.file",
             "parameters": []
         },
         {
-            "name": "kubectl",
-            "pipelineFile": "kubectl.file",
+            "name": "kubeconfig",
+            "pipelineFile": "kubeconfig.file",
             "parameters": []
         }
     ]

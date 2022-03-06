@@ -1,0 +1,25 @@
+podTemplate(
+    containers: [
+        containerTemplate(name: 'kubectl', image: 'pablords/kubectl:latest', command: 'sleep', args: '99d')
+    ]
+  ) {
+
+    environment {
+        VAULT_URL = 'http://devops-dev.ddns.net:8083'
+    }
+    node(POD_LABEL) {
+        
+    
+        stage('get secret'){
+            container('kubectl'){
+                stage('command') {
+                    withCredentials([string(credentialsId: 'K8S_CREDENTIAL', variable: 'k8s')]) {
+                        sh 'kubectl --token=$k8s get pods -n jenkins'
+                    }
+                }
+
+            }
+        }
+        
+    }
+}

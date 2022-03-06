@@ -9,9 +9,8 @@ kubectl create namespace jenkins && kubectl create serviceaccount jenkins --name
 Criar secret VAULT_ROOT
 
 kubectl create secret generic vault-root-credential \
---from-literal=secret="s.2WxouO1uLR0aszXtY2iYaEdU" \
+--from-literal=secret="" \
 --namespace="jenkins"
-
 
 
 kubectl create clusterrolebinding jenkins --clusterrole cluster-admin --serviceaccount=jenkins:default

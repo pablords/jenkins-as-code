@@ -17,7 +17,7 @@ services:
       - JENKINS_TUNNEL_URL=192.168.50.10:50000
       - SONARQUBE_URL=http://devops-dev.ddns.net:9000
       - VAULT_URL=http://devops-dev.ddns.net:8083
-      - VAULT_TOKEN_ADMIN=
+      - VAULT_TOKEN_ADMIN=s.2WxouO1uLR0aszXtY2iYaEdU
 
 
 

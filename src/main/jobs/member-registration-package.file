@@ -1,18 +1,75 @@
-pipeline {
-  agent any 
-    stages {
-        stage('Build and Publish') { 
-            steps {
-                echo "${params.TAG}"
-                withCredentials([usernamePassword(credentialsId: 'docker-registry', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh 'docker login -u ${USERNAME} -p ${PASSWORD} devops-dev.ddns.net:5000'
+
+
+
+podTemplate(
+    containers: [
+        containerTemplate(name: 'nodejs', image: 'node:14-slim', command: 'sleep', args: '99d'),
+        containerTemplate(name: 'docker', image: 'docker', command: 'sleep', args: '99d')
+    ],
+    volumes: [
+        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
+    ]
+)
+
+{
+
+    node(POD_LABEL) {
+     def secrets = [
+        [path: 'kv/apps/docker-hub', engineVersion: 1, secretValues: [
+            [envVar: 'docker_hub_user', vaultKey: 'user'],
+            [envVar: 'docker_hub_pass', vaultKey: 'pass']
+            ]
+        ],
+        [path: 'kv/apps/member-registration/npm', engineVersion: 1, secretValues: [
+            [envVar: 'npm_token', vaultKey: 'secret']
+            ]
+        ]
+
+    ]
+
+
+
+    def configuration = [
+        vaultUrl: env.VAULT_URL,
+        vaultCredentialId: 'VAULT_APP_ROLE_CREDENTIAL',
+        engineVersion: 1
+    ]
+
+        stage('GET ARTIFACTORY APP') {
+            container('nodejs') {
+                script {
+                    withVault([configuration: configuration, vaultSecrets: secrets]) {
+                        sh "npm set _auth=${npm_token}"
+                        sh "npm install ${params.IMAGE}@${params.TAG} --registry=http://devops-dev.ddns.net:8081/repository/npm-group/"
+                        sh "mv node_modules/${params.IMAGE} ${WORKSPACE}"
+                    }
                 }
-                sh "wget -c http://devops-dev.ddns.net:8081/repository/npm-private/member-registration/-/${params.JOB}-${params.TAG}.tgz -O - | tar -xz"                
-                sh "cd package && docker build -f Dockerfile -t ${params.JOB}-${params.TAG} ."
-                sh "docker tag ${params.JOB}-${params.TAG} devops-dev.ddns.net:5000/${params.JOB}-${params.TAG}"
-                sh "docker push devops-dev.ddns.net:5000/${params.JOB}-${params.TAG}"
-              
             }
         }
+  
+        stage('BUILD IMAGE') {
+            container('docker') {
+                script {
+                    withVault([configuration: configuration, vaultSecrets: secrets]) {
+                       sh "docker login -u ${docker_hub_user} -p ${docker_hub_pass}"
+                       sh "cd ${params.IMAGE} && docker build -f Dockerfile -t pablords/${params.IMAGE}:${params.TAG} ."
+                       sh "docker push pablords/${params.IMAGE}:${params.TAG}"
+                    }
+                }
+            }
+        }
+        
+        stage('START JOB DEPLOY') {
+            container('docker'){
+                script {
+                    build job: 'member-registration-deploy', wait: false, 
+                    parameters: [
+                        string(name: 'TAG', value: "${params.TAG}"),
+                        string(name: 'IMAGE', value: "${params.IMAGE}")
+                    ]
+                }
+            }
+        }
+        
     }
 }

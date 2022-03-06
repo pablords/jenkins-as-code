@@ -1,0 +1,101 @@
+
+
+
+podTemplate(
+    containers: [
+        containerTemplate(name: 'nodejs', image: 'node:14-slim', command: 'sleep', args: '99d'),
+        containerTemplate(name: 'sonar-scanner', image: 'sonarsource/sonar-scanner-cli', command: 'sleep', args: '99d'),
+        containerTemplate(name: 'docker', image: 'docker', command: 'sleep', args: '99d')
+    ],
+    volumes: [
+        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
+    ]
+)
+
+{
+
+    node(POD_LABEL) {
+        
+    def secrets = [
+        [path: 'kv/apps/sonar/member-registratiton', engineVersion: 1, secretValues: [
+            [envVar: 'sonar_project', vaultKey: 'secret']
+            ]
+        ]
+    ]
+
+
+    def configuration = [
+        vaultUrl: env.VAULT_URL,
+        vaultCredentialId: 'VAULT_APP_ROLE_CREDENTIAL',
+        engineVersion: 1
+    ]
+    
+
+        stage('BUILD') {
+            git 'https://github.com/pablords/member-registration.git'
+            container('nodejs') {
+                stage('DEPENDENCIES') {
+                    sh 'npm install'
+                }
+                stage('UNIT TESTS') {
+                    sh 'npm run test'
+                }
+                stage('COMPILATION') {
+                    sh 'npm run build'
+                }
+            }
+        }
+ 
+        
+        stage('NPM PUBLISH') {
+            container('nodejs') {
+                script {
+                   sh "npm version major"
+                   def props = readJSON file: './package.json'
+                   VERSION = props['version']
+                   sh "npm publish"
+                }
+            }
+        }
+        
+        stage('CODE ANALYSIS') {
+            container('sonar-scanner') {
+                script {
+                    withVault([configuration: configuration, vaultSecrets: secrets]) {
+                        sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=member-registration \
+                          -Dsonar.projectBaseDir=./ \
+                          -Dsonar.sources=./src \
+                          -Dsonar.tests=./__test__ \
+                          -Dsonar.language=ts \
+                          -Dsonar.sourceEncoding=UTF-8 \
+                          -Dsonar.exclusions=**/node_modules/**,build/**,_devops/**,pipeline/** \
+                          -Dsonar.junit.reportPaths=junit.xml \
+                          -Dsonar.javascript.lcov.reportPaths=sonar/lcov.info \
+                          -Dsonar.host.url=http://devops-dev.ddns.net:8082 \
+                          -Dsonar.login=${sonar_project} \
+                          -Dsonar.password=
+                        '''
+                    }
+                   
+                }
+            }
+        }
+        
+        stage('START JOB PACKAGE') {
+            container('docker'){
+                script {
+                    name = "${env.JOB_NAME}"
+                    image = name.substring(0, name.toLowerCase().indexOf('-build'))
+                    build job: 'member-registration-package', wait: false,
+                    parameters: [
+                        string(name: 'TAG', value: VERSION),
+                        string(name: 'IMAGE', value: "${image}")
+                    ]
+                }
+            }
+        }
+        
+    }
+}
