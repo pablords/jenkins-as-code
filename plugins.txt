@@ -1,7 +1,7 @@
 kubernetes
 github
 http_request
-hashicorp-vault-plugin
+hashicorp-vault-plugin:3.8.0
 sonar
 workflow-job
 branch-api
@@ -19,4 +19,6 @@ pipeline-milestone-step
 pipeline-stage-step
 pipeline-model-definition
 pipeline-input-step
-
+matrix-auth
+role-strategy
+job-dsl

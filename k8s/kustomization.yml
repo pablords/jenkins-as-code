@@ -7,5 +7,6 @@ resources:
   - rolebing.yml
   - pv.yml
   - pvc.yml
+  - autoscale.yml
   - ingress.yml
 

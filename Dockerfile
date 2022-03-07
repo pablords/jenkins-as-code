@@ -12,6 +12,7 @@ ENV SONARQUBE_URL=http://devops-dev.ddns.net:9000
 ENV VAULT_URL=http://devops-dev.ddns.net:8083
 
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+ENV JAVA_OPTS="-Dpermissive-script-security.enabled=true"
 
 USER jenkins
 

@@ -17,7 +17,7 @@ podTemplate(
     node(POD_LABEL) {
         
     def secrets = [
-        [path: 'kv/apps/sonar/member-registratiton', engineVersion: 1, secretValues: [
+        [path: 'kv/apps/member-registration/sonar', engineVersion: 1, secretValues: [
             [envVar: 'sonar_project', vaultKey: 'secret']
             ]
         ]

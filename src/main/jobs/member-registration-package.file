@@ -15,9 +15,9 @@ podTemplate(
 
     node(POD_LABEL) {
      def secrets = [
-        [path: 'kv/apps/docker-hub', engineVersion: 1, secretValues: [
+        [path: 'kv/docker/docker-hub', engineVersion: 1, secretValues: [
             [envVar: 'docker_hub_user', vaultKey: 'user'],
-            [envVar: 'docker_hub_pass', vaultKey: 'pass']
+            [envVar: 'docker_hub_pass', vaultKey: 'password']
             ]
         ],
         [path: 'kv/apps/member-registration/npm', engineVersion: 1, secretValues: [

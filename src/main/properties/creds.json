@@ -3,17 +3,17 @@
         {
             "id": "NEXUS_CREDENTIAL",
             "description": "nexus credential",
-            "path": "kv/apps/nexus"
+            "path": "kv/jenkins/nexus"
         },
         {
             "id": "SONAR_CREDENTIAL",
             "description": "sonar credential",
-            "path": "kv/apps/sonar"
+            "path": "kv/jenkins/sonar"
         },
         {
             "id": "K8S_CREDENTIAL",
             "description": "k8s credential",
-            "path": "kv/apps/k8s"
+            "path": "kv/jenkins/k8s-role"
         }
     ]
 }
