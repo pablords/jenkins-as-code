@@ -5,8 +5,8 @@ resources:
   - service-accounts.yml
   - role.yml
   - rolebing.yml
-  - pv.yml
-  - pvc.yml
+  #- pv.yml
+  #- pvc.yml
   - autoscale.yml
   - ingress.yml
 

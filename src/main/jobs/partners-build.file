@@ -17,7 +17,7 @@ podTemplate(
     node(POD_LABEL) {
         
     def secrets = [
-        [path: 'kv/apps/member-registration/sonar', engineVersion: 1, secretValues: [
+        [path: 'kv/apps/partners/sonar', engineVersion: 1, secretValues: [
             [envVar: 'sonar_project', vaultKey: 'secret']
             ]
         ]
@@ -32,13 +32,13 @@ podTemplate(
     
 
         stage('BUILD') {
-            git 'https://github.com/pablords/member-registration.git'
+            git 'https://github.com/pablords/partners.git'
             container('nodejs') {
                 stage('DEPENDENCIES') {
                     sh 'npm install'
                 }
                 stage('UNIT TESTS') {
-                    sh 'npm run test'
+                    sh 'npm run test:unit'
                 }
                 stage('COMPILATION') {
                     sh 'npm run build'
@@ -64,7 +64,7 @@ podTemplate(
                     withVault([configuration: configuration, vaultSecrets: secrets]) {
                         sh '''
                         sonar-scanner \
-                          -Dsonar.projectKey=member-registration \
+                          -Dsonar.projectKey=partners \
                           -Dsonar.projectBaseDir=./ \
                           -Dsonar.sources=./src \
                           -Dsonar.tests=./__test__ \
@@ -88,7 +88,7 @@ podTemplate(
                 script {
                     name = "${env.JOB_NAME}"
                     image = name.substring(0, name.toLowerCase().indexOf('-build'))
-                    build job: 'member-registration-package', wait: false,
+                    build job: 'partners-package', wait: false,
                     parameters: [
                         string(name: 'TAG', value: VERSION),
                         string(name: 'IMAGE', value: "${image}")

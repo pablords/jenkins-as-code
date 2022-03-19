@@ -1,18 +1,18 @@
 {
     "initialJobs": [
         {
-            "name": "member-registration-build",
-            "pipelineFile": "member-registration-build.file",
+            "name": "partners-build",
+            "pipelineFile": "partners-build.file",
             "parameters": []
         },
         {
-            "name": "member-registration-package",
-            "pipelineFile": "member-registration-package.file",
+            "name": "partners-package",
+            "pipelineFile": "partners-package.file",
             "parameters": []
         },
         {
-            "name": "member-registration-deploy",
-            "pipelineFile": "member-registration-deploy.file",
+            "name": "partners-deploy",
+            "pipelineFile": "partners-deploy.file",
             "parameters": []
         },
         {

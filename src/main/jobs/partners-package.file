@@ -20,7 +20,7 @@ podTemplate(
             [envVar: 'docker_hub_pass', vaultKey: 'password']
             ]
         ],
-        [path: 'kv/apps/member-registration/npm', engineVersion: 1, secretValues: [
+        [path: 'kv/apps/partners/npm', engineVersion: 1, secretValues: [
             [envVar: 'npm_token', vaultKey: 'secret']
             ]
         ]
@@ -62,7 +62,7 @@ podTemplate(
         stage('START JOB DEPLOY') {
             container('docker'){
                 script {
-                    build job: 'member-registration-deploy', wait: false, 
+                    build job: 'partners-deploy', wait: false, 
                     parameters: [
                         string(name: 'TAG', value: "${params.TAG}"),
                         string(name: 'IMAGE', value: "${params.IMAGE}")

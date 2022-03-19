@@ -9,7 +9,7 @@ podTemplate(
     }
     
     def secrets = [
-        [path: 'kv/apps/member-registration/k8s-role', engineVersion: 1, secretValues: [
+        [path: 'kv/apps/partners/k8s-role', engineVersion: 1, secretValues: [
             [envVar: 'k8s_role', vaultKey: 'secret']
             ]
         ]
