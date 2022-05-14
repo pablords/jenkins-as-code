@@ -15,8 +15,8 @@ services:
       - KUBERNETES_SERVER_URL=https://192.168.50.10:6443
       - JENKINS_SERVER_URL=http://192.168.50.10:8080
       - JENKINS_TUNNEL_URL=192.168.50.10:50000
-      - SONARQUBE_URL=http://devops-dev.ddns.net:9000
-      - VAULT_URL=http://devops-dev.ddns.net:8083
+      - SONARQUBE_URL=http://dev-testdevops.ddns.net:9000
+      - VAULT_URL=http://dev-testdevops.ddns.net:8083
       - VAULT_TOKEN_ADMIN=
 
 
