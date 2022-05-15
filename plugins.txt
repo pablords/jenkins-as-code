@@ -22,4 +22,4 @@ pipeline-input-step
 matrix-auth
 role-strategy
 job-dsl
-metricas
+metrics

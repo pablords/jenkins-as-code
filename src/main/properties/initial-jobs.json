@@ -16,6 +16,11 @@
             "parameters": []
         },
         {
+            "name": "notifications-build",
+            "pipelineFile": "notifications-build.file",
+            "parameters": []
+        },
+        {
             "name": "kubeconfig",
             "pipelineFile": "kubeconfig.file",
             "parameters": []

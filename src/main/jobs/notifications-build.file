@@ -1,0 +1,61 @@
+
+
+
+podTemplate(
+    containers: [
+        containerTemplate(name: 'golang', image: 'golang:1.16', command: 'sleep', args: '99d'),
+        containerTemplate(name: 'sonar-scanner', image: 'sonarsource/sonar-scanner-cli', command: 'sleep', args: '99d')
+    ]
+)
+
+{
+
+    node(POD_LABEL) {
+        
+    def secrets = [
+        [path: 'kv/apps/notifications/sonar', engineVersion: 1, secretValues: [
+            [envVar: 'sonar_project', vaultKey: 'secret']
+            ]
+        ]
+    ]
+
+
+    def configuration = [
+        vaultUrl: env.VAULT_URL,
+        vaultCredentialId: 'VAULT_APP_ROLE_CREDENTIAL',
+        engineVersion: 1
+    ]
+    
+
+        stage('BUILD') {
+            git 'https://github.com/pablords/notifications-ms.git'
+            container('golang') {
+                stage('DEPENDENCIES') {
+                    sh 'go build'
+                }
+            }
+        }
+        
+        stage('CODE ANALYSIS') {
+            container('sonar-scanner') {
+                script {
+                    withVault([configuration: configuration, vaultSecrets: secrets]) {
+                        sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=notifications \
+                          -Dsonar.projectBaseDir=./ \
+                          -Dsonar.sources=./src \
+                          -Dsonar.junit.reportPaths=junit.xml \
+                          -Dsonar.host.url=http://dev-testdevops.ddns.net:8082 \
+                          -Dsonar.login=${sonar_project} \
+                          -Dsonar.password=
+                        '''
+                    }
+                   
+                }
+            }
+        }
+        
+        
+    }
+}
