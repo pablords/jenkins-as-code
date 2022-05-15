@@ -17,4 +17,3 @@ kubectl create secret generic vault-root-credential \
 
 
 kubectl create clusterrolebinding jenkins --clusterrole cluster-admin --serviceaccount=jenkins:default
-

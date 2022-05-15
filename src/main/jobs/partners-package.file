@@ -40,7 +40,7 @@ podTemplate(
                 script {
                     withVault([configuration: configuration, vaultSecrets: secrets]) {
                         sh "npm set _auth=${npm_token}"
-                        sh "npm install ${params.IMAGE}@${params.TAG} --registry=http://devops-dev.ddns.net:8081/repository/npm-group/"
+                        sh "npm install ${params.IMAGE}@${params.TAG} --registry=http://dev-testdevops.ddns.net:8081/repository/npm-group/"
                         sh "mv node_modules/${params.IMAGE} ${WORKSPACE}"
                     }
                 }

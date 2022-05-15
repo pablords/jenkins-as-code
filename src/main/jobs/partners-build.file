@@ -32,7 +32,7 @@ podTemplate(
     
 
         stage('BUILD') {
-            git 'https://github.com/pablords/partners.git'
+            git 'https://github.com/pablords/partners-ms.git'
             container('nodejs') {
                 stage('DEPENDENCIES') {
                     sh 'npm install'
@@ -73,7 +73,7 @@ podTemplate(
                           -Dsonar.exclusions=**/node_modules/**,build/**,_devops/**,pipeline/** \
                           -Dsonar.junit.reportPaths=junit.xml \
                           -Dsonar.javascript.lcov.reportPaths=sonar/lcov.info \
-                          -Dsonar.host.url=http://devops-dev.ddns.net:8082 \
+                          -Dsonar.host.url=http://dev-testdevops.ddns.net:8082 \
                           -Dsonar.login=${sonar_project} \
                           -Dsonar.password=
                         '''
