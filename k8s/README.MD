@@ -7,8 +7,6 @@ kubectl create namespace jenkins && kubectl create serviceaccount jenkins --name
 
 
 
-kubectl create namespace partners && kubectl create serviceaccount partners --namespace=partners && kubectl describe secret $(kubectl describe serviceaccount partners --namespace=partners | grep Token | awk '{print $2}') --namespace=partners && kubectl create rolebinding partners-admin-binding --clusterrole=admin --serviceaccount=partners:partners --namespace=partners
-
 Criar secret VAULT_ROOT
 
 kubectl create secret generic vault-root-credential \
@@ -17,3 +15,6 @@ kubectl create secret generic vault-root-credential \
 
 
 kubectl create clusterrolebinding jenkins --clusterrole cluster-admin --serviceaccount=jenkins:default
+
+
+helm upgrade --install jenkins-as-code .

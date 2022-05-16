@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.metadata.name }}
+  namespace: {{ .Values.metadata.namespace }}
+  labels:
+    app: {{ .Values.metadata.labels.app }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.metadata.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.metadata.name }}
+    spec:
+      containers:
+        - name: {{ .Values.metadata.name }}
+          image:  "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          resources:
+          ports:
+            - name: {{ .Values.ports.httpPort }}
+              containerPort: {{ .Values.ports.httpPortcontainerPort }}
+            - name: {{ .Values.ports.jnlpPort }}
+              containerPort:  {{ .Values.ports.jnlpPortcontainerPort }}
+          env:
+            - name:  {{ .Values.env.kubernetesUrl.name }}
+              value: {{ .Values.env.kubernetesUrl.value }}
+            - name: {{ .Values.env.sonarUrl.name }}
+              value: {{ .Values.env.sonarUrl.value }}
+            - name: {{ .Values.env.vaultUrl.name }}
+              value: {{ .Values.env.vaultUrl.value }}
+            - name: {{ .Values.env.jenkinsUrl.name }}
+              value: {{ .Values.env.jenkinsUrl.value }}
+            - name: {{ .Values.env.jenkinsTunnelUrl.name }}
+              value: {{ .Values.env.jenkinsTunnelUrl.value }}
+            - name: {{ .Values.env.vaultTokenAdminKey }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.valueFrom.secretKeyRef.name }}
+                  key: {{ .Values.env.valueFrom.secretKeyRef.key }}
+          volumeMounts:
+            - name: {{ .Values.volumeMounts.name }}
+              mountPath: {{ .Values.volumeMounts.mountPath }}
+      volumes:
+        - name: {{ .Values.volumes.name }}
+          emptyDir: {}
+      # volumes:
+      #  - name: {{ .Values.volumes.name }}
+      #    persistentVolumeClaim:
+      #      claimName: {{ .Values.volumes.persistentVolumeClaim.claimName }}
+      # securityContext:
+      #  fsGroup: {{ .Values.volumes.securityContext.fsGroup }}
+      #  runAsUser: {{ .Values.volumes.securityContext.runAsUser }}

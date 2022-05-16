@@ -1,0 +1,7 @@
+apiVersion: v1
+name: jenkins-as-code
+version: v1.0
+description: jenkins configurado como codigo
+maintainers: 
+  - name: Pablo Ruan
+    email: pablords@gmail.com

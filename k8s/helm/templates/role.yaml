@@ -1,0 +1,13 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Values.metadata.name }}
+  namespace: {{ .Values.metadata.namespace }}
+rules:
+{{- range $key, $value := .Values.roles }} 
+  - apiGroups: [""]
+    resources: {{ $value.resources }}
+    verbs: {{ $value.verbs }}
+{{- end }}
+
+

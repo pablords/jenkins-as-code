@@ -1,0 +1,135 @@
+
+image:
+  repository: pablords/jenkins-as-code
+  tag: 1.0.4
+  imagePullPolicy: IfNotPresent
+
+replicas: 1
+
+
+metadata:
+  name: jenkins
+  namespace: jenkins
+  labels:
+    app: jenkins
+
+ports:
+  httpPort: http-port
+  httpPortcontainerPort: 8080
+  jnlpPort: jnlp-port
+  jnlpPortcontainerPort: 50000
+
+env:
+  kubernetesUrl:
+    name: KUBERNETES_SERVER_URL
+    value: "https://kubernetes.default"
+  sonarUrl:
+    name: SONARQUBE_URL
+    value: "http://dev-testdevops.ddns.net:9000"
+  vaultUrl:
+    name: VAULT_URL
+    value: "http://dev-testdevops.ddns.net:8083"
+  jenkinsUrl:  
+    name: JENKINS_SERVER_URL
+    value: ""
+  jenkinsTunnelUrl:
+    name: JENKINS_TUNNEL_URL
+    value: ""
+  vaultTokenAdminKey: VAULT_TOKEN_ADMIN
+  valueFrom:
+    secretKeyRef:
+      name: vault-root-credential
+      key: secret
+
+volumeMounts:
+  name: jenkins-vol
+  mountPath: /var/jenkins_home
+
+volumes:
+  name: jenkins-vol
+  persistentVolumeClaim:
+    claimName: jenkins-pvc
+  securityContext:
+    fsGroup: 1000
+    runAsUser: 0
+
+
+
+service:
+  http:
+    type: ClusterIP
+    port: 8080
+    nodePort: 30001
+    targetPort: 8080
+    name: jenkins-http
+    protocol: TCP
+    selector:
+      app: jenkins
+
+  jnlp:
+    type: ClusterIP
+    port: 50000
+    nodePort: 30009
+    targetPort: 50000
+    name: jenkins-jnlp
+    protocol: TCP
+    selector:
+      app: jenkins
+
+ingress:
+  ingressClassName: nginx
+  host: dev.jenkins.com.br
+  path: /
+  pathType: Prefix
+  backend:
+    service:
+      name: jenkins-http
+      port:
+        number: 8080
+
+autoscale:
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 50
+
+persistentVolume:
+  name: jenkins-pv
+  annotations: "urgrugr"
+  labels:
+    type: local
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes: ReadWriteOnce
+  hostPath:
+    path: "/home/vagrant/data"
+
+
+persistentVolumeClaim:
+  name: jenkins-pvc
+  storageClassName: manual
+  accessModes: ReadWriteOnce
+  storage: 6Gi
+
+roles:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get", "list", "watch"]
+
+rolebinding:
+  default:
+    roleRef: 
+      name: jenkins
+    subjects: 
+      name: default
+  jenkins:
+    roleRef: 
+      name: jenkins
+    subjects: 
+      name: jenkins
