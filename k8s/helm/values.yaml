@@ -41,19 +41,6 @@ env:
       name: vault-root-credential
       key: secret
 
-volumeMounts:
-  name: jenkins-vol
-  mountPath: /var/jenkins_home
-
-volumes:
-  name: jenkins-vol
-  persistentVolumeClaim:
-    claimName: jenkins-pvc
-  securityContext:
-    fsGroup: 1000
-    runAsUser: 0
-
-
 
 service:
   http:
@@ -110,6 +97,19 @@ persistentVolumeClaim:
   storageClassName: manual
   accessModes: ReadWriteOnce
   storage: 6Gi
+
+volumeMounts:
+  name: jenkins-vol
+  mountPath: /var/jenkins_home
+
+volumes:
+  name: jenkins-vol
+  persistentVolumeClaim:
+    claimName: jenkins-pvc
+  securityContext:
+    fsGroup: 1000
+    runAsUser: 0
+
 
 roles:
   - apiGroups: [""]
